@@ -9,6 +9,6 @@
         public DateOnly DateRelease { get; set; }
         public string Country { get; set; }
         public Category Category { get; set; }
-        public ICollection<Link> Links { get; set; }
+        public ICollection<MovieLink> MovieLinks { get; set; }
     }
 }

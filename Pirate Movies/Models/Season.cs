@@ -4,5 +4,6 @@
     {
         public Guid Id { get; set; }
         public int Number { get; set; }
+        public ICollection<SeasonShow> SeasonShows { get; set; }
     }
 }
