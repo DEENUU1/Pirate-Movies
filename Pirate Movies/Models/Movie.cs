@@ -9,6 +9,6 @@
         public DateOnly DateRelease { get; set; }
         public string Country { get; set; }
         public Category Category { get; set; }
-        // Links Collections
+        public ICollection<Link> Links { get; set; }
     }
 }
