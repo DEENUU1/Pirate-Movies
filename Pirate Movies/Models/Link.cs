@@ -1,6 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-
-namespace Pirate_Movies.Models
+﻿namespace Pirate_Movies.Models
 {
     public class Link
     {
