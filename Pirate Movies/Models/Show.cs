@@ -9,6 +9,6 @@
         public DateOnly DateRelease { get; set; }
         public string Country { get; set; }
         public Category Category { get; set; } 
-        // Season Id 
+        public ICollection<Season> Seasons { get; set; }
     }
 }
