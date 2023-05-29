@@ -20,12 +20,14 @@ namespace Pirate_Movies.Repository
 
         public bool CreateCategory(Category category)
         {
-            throw new NotImplementedException();
+            _context.Add(category);
+            return Save();
         }
 
         public bool DeleteCategory(Category category)
         {
-            throw new NotImplementedException();
+            _context.Remove(category);
+            return Save();
         }
 
         public ICollection<Category> GetCategories()
@@ -35,7 +37,7 @@ namespace Pirate_Movies.Repository
 
         public Category GetCategory(int id)
         {
-            throw new NotImplementedException();
+            return _context.Categories.Where(c => c.Id == id).FirstOrDefault();
         }
 
         public bool Save()
@@ -46,7 +48,8 @@ namespace Pirate_Movies.Repository
 
         public bool UpdateCategory(Category category)
         {
-            throw new NotImplementedException();
+            _context.Update(category);
+            return Save();
         }
     }
 }
