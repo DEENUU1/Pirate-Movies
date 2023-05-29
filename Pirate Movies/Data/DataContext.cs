@@ -19,16 +19,17 @@ namespace Pirate_Movies.Data
         public DbSet<Country> Countries { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Category One to Many 
             modelBuilder.Entity<Movie>()
                 .HasOne(m => m.Category)
-                .WithMany()
+                .WithMany() 
                 .HasForeignKey(movie => movie.CategoryId);
 
             modelBuilder.Entity<Show>()
                 .HasOne(s => s.Category)
                 .WithMany()
                 .HasForeignKey(show => show.CategoryId);
-
+            // Country One to Many
             modelBuilder.Entity<Movie>()
                 .HasOne(m => m.Country)
                 .WithMany()
@@ -38,12 +39,12 @@ namespace Pirate_Movies.Data
                 .HasOne(s => s.Country)
                 .WithMany()
                 .HasForeignKey(show => show.CountryId);
-
+            // Show One to Many
             modelBuilder.Entity<Episode>()
                 .HasOne(e => e.Show)
                 .WithMany(s => s.Episodes)
                 .HasForeignKey(episode => episode.ShowId);
-
+            // Links One to Many 
             modelBuilder.Entity<Episode>()
                 .HasMany(e => e.Links)
                 .WithOne(link => link.Episode)

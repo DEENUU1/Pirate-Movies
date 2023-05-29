@@ -6,8 +6,10 @@ namespace Pirate_Movies.Interfaces
     {
         ICollection<Country> GetCountries();
         Country GetCountry(int id);
-        bool CountryCreate(Country country);
         bool CountryExists(int id);
+        bool CreateCountry(Country country);
+        bool UpdateCountry(Country country);
+        bool DeleteCountry(Country country);
         bool Save();
     }
 }

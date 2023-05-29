@@ -6,8 +6,10 @@ namespace Pirate_Movies.Interfaces
     {
         ICollection<Category> GetCategories();
         Category GetCategory(int id);
-        bool CategoryCreate(Category category);
         bool CategoryExists(int id);
+        bool CreateCategory(Category category);
+        bool UpdateCategory(Category category);
+        bool DeleteCategory(Category category);
         bool Save();
     }
 }

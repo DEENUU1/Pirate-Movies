@@ -11,6 +11,9 @@ namespace Pirate_Movies.Interfaces
         ICollection<Show> GetShowByCountry(int countryId);
         ICollection<IEpisodeRepository> GetEpisodes(int ShowId);
         bool ShowExists(int id);
+        bool CreateShow(Show show);
+        bool UpdateShow(Show show);
+        bool DeleteShow(Show show);
         bool Save();
     }
 }

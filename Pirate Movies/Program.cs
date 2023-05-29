@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Pirate_Movies;
 using Pirate_Movies.Data;
-using System;
-using Microsoft.Extensions.DependencyInjection;
+using Pirate_Movies.Interfaces;
+using Pirate_Movies.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
 builder.Services.AddDbContext<DataContext>(options =>
 {
@@ -26,6 +27,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+
 }
 
 app.UseHttpsRedirection();
@@ -33,6 +35,8 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseDeveloperExceptionPage();
 
 using (var scope = app.Services.CreateScope())
 {
