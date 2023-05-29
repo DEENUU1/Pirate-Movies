@@ -2,12 +2,14 @@
 {
     public class Link
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public string ServiceName { get; set; }
         public string Url { get; set; }
         public string Quality { get; set; }
-        
-        public ICollection<MovieLink> MovieLinks { get; set; }
-        public ICollection<EpisodeLink> EpisodeLinks { get; set; }
+        public int? EpisodeId { get; set; }
+        public Episode Episode { get; set; }
+        public int? MovieId { get; set; }
+        public Movie Movie { get; set; }
+
     }
 }

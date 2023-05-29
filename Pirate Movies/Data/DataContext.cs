@@ -15,68 +15,46 @@ namespace Pirate_Movies.Data
         public DbSet<Movie> Movies { get; set; }
         public DbSet<Episode> Episodes { get; set;}
         public DbSet<Link> Links { get; set; }  
-        public DbSet<Season> Seasons { get; set; }
         public DbSet<Show> Shows { get; set; }
-        public DbSet<SeasonShow> SeasonShows { get; set; }
-        public DbSet<MovieLink> MovieLinks { get; set; }
-        public DbSet<EpisodeLink> EpisodeLinks { get; set; }
-
+        public DbSet<Country> Countries { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Movie>() // Movie and Category One to One
+            modelBuilder.Entity<Movie>()
                 .HasOne(m => m.Category)
                 .WithMany()
-                .HasForeignKey(m => m.Category);
-            modelBuilder.Entity<Show>() // Show and Category One to One 
+                .HasForeignKey(movie => movie.CategoryId);
+
+            modelBuilder.Entity<Show>()
                 .HasOne(s => s.Category)
                 .WithMany()
-                .HasForeignKey(s => s.Category);
+                .HasForeignKey(show => show.CategoryId);
 
-            modelBuilder.Entity<Episode>() // Episode and Season One to One
-                .HasOne(e => e.Season)
-                .WithMany()
-                .HasForeignKey(e => e.Season);
-
-            modelBuilder.Entity<Episode>() // Episode and Show One to One 
-                .HasOne(e => e.Show)
-                .WithMany()
-                .HasForeignKey(e => e.Show);
-            // SeasonShow and Show Many to Many 
-            modelBuilder.Entity<SeasonShow>()
-                .HasKey(ss => new { ss.ShowId, ss.SeasonId });
-
-            modelBuilder.Entity<SeasonShow>()
-                .HasOne(ss => ss.Show)
-                .WithMany(s => s.SeasonShows)
-                .HasForeignKey(ss => ss.ShowId);
-
-            modelBuilder.Entity<SeasonShow>()
-                .HasOne(ss => ss.Season)
-                .WithMany(s => s.SeasonShows)
-                .HasForeignKey(ss => ss.SeasonId);
-
-            // Link and Movie Many to One 
             modelBuilder.Entity<Movie>()
-                .HasMany(m => m.MovieLinks)
-                .WithOne(ml => ml.Movie)
-                .HasForeignKey(ml => ml.MovieId);
+                .HasOne(m => m.Country)
+                .WithMany()
+                .HasForeignKey(movie => movie.CountryId);
 
-            modelBuilder.Entity<Link>()
-                .HasMany(l => l.MovieLinks)
-                .WithOne(ml => ml.Link)
-                .HasForeignKey(ml => ml.LinkId);
+            modelBuilder.Entity<Show>()
+                .HasOne(s => s.Country)
+                .WithMany()
+                .HasForeignKey(show => show.CountryId);
 
             modelBuilder.Entity<Episode>()
-                .HasMany(e => e.EpisodeLinks)
-                .WithOne(el => el.Episode)
-                .HasForeignKey(el => el.EpisodeId);
+                .HasOne(e => e.Show)
+                .WithMany(s => s.Episodes)
+                .HasForeignKey(episode => episode.ShowId);
 
-            modelBuilder.Entity<Link>()
-                .HasMany(l => l.EpisodeLinks)
-                .WithOne(el => el.Link)
-                .HasForeignKey(el => el.LinkId);
+            modelBuilder.Entity<Episode>()
+                .HasMany(e => e.Links)
+                .WithOne(link => link.Episode)
+                .HasForeignKey(link => link.EpisodeId)
+                .IsRequired(false);
 
-
+            modelBuilder.Entity<Movie>()
+                .HasMany(m => m.Links)
+                .WithOne(link => link.Movie)
+                .HasForeignKey(link => link.MovieId)
+                .IsRequired(false);
 
             base.OnModelCreating(modelBuilder);
         }

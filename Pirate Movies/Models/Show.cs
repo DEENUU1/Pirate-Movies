@@ -2,13 +2,14 @@
 {
     public class Show
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        // poster
-        public DateOnly DateRelease { get; set; }
-        public string Country { get; set; }
+        public DateTime DateRelease { get; set; }
+        public Country Country { get; set; }
+        public int CountryId { get; set; }
         public Category Category { get; set; }
-        public ICollection<SeasonShow> SeasonShows { get; set; }
+        public int CategoryId { get; set; }
+        public ICollection<Episode> Episodes { get; set;}
     }
 }

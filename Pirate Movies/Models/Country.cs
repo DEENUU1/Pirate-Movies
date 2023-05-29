@@ -1,6 +1,6 @@
 ﻿namespace Pirate_Movies.Models
 {
-    public class Category
+    public class Country
     {
         public int Id { get; set; }
         public string Name { get; set; }
