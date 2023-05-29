@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Pirate_Movies.Interfaces;
+using Pirate_Movies.Models;
 
 namespace Pirate_Movies.Controllers
 {
@@ -18,7 +19,54 @@ namespace Pirate_Movies.Controllers
         public IActionResult GetCategories()
         {
             var categories = _categoryRepository.GetCategories();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState); 
+            }
             return Ok(categories);
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetCategory(int id)
+        {
+            if (!_categoryRepository.CategoryExists(id))
+                return NotFound();
+            
+            var category = _categoryRepository.GetCategory(id);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);  
+            return Ok(category);
+        }
+
+        [HttpPost]
+        public IActionResult CreateCategory([FromBody] Category categoryCreate)
+        {
+            if (categoryCreate == null)
+                return BadRequest(ModelState);
+            var category = _categoryRepository.GetCategories().Where(c => c.Name.Trim().ToUpper() == categoryCreate.Name.TrimEnd().ToUpper()).FirstOrDefault();
+
+            if (category != null)
+            {
+                ModelState.AddModelError("", "Category already exists");
+                return StatusCode(422, ModelState);
+            }
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var categoryMap = new Category
+            {
+                Name = categoryCreate.Name,
+            };
+
+            if (!_categoryRepository.CreateCategory(categoryMap))
+            {
+                ModelState.AddModelError("", "Something went wrong while saving");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successfully created"); 
+
         }
 
     }
