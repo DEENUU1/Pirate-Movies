@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Pirate_Movies.Dto;
 using Pirate_Movies.Interfaces;
 using Pirate_Movies.Models;
 
@@ -10,10 +12,11 @@ namespace Pirate_Movies.Controllers
     public class CategoryController : ControllerBase
     {
         private readonly ICategoryRepository _categoryRepository;
-
-        public CategoryController(ICategoryRepository categoryRepository)
+        private readonly IMapper _mapper;
+        public CategoryController(ICategoryRepository categoryRepository, IMapper mapper)
         {
             _categoryRepository = categoryRepository;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -40,11 +43,14 @@ namespace Pirate_Movies.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateCategory([FromBody] Category categoryCreate)
+        public IActionResult CreateCategory([FromBody] CategoryDto categoryCreate)
         {
             if (categoryCreate == null)
                 return BadRequest(ModelState);
-            var category = _categoryRepository.GetCategories().Where(c => c.Name.Trim().ToUpper() == categoryCreate.Name.TrimEnd().ToUpper()).FirstOrDefault();
+
+            var category = _categoryRepository.GetCategories()
+                .Where(c => c.Name.Trim().ToUpper() == categoryCreate.Name.TrimEnd().ToUpper())
+                .FirstOrDefault();
 
             if (category != null)
             {
@@ -55,10 +61,7 @@ namespace Pirate_Movies.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var categoryMap = new Category
-            {
-                Name = categoryCreate.Name,
-            };
+            var categoryMap = _mapper.Map<Category>(categoryCreate);
 
             if (!_categoryRepository.CreateCategory(categoryMap))
             {
@@ -92,7 +95,7 @@ namespace Pirate_Movies.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateCategory(int id, [FromBody] Category updatedCategory)
+        public IActionResult UpdateCategory(int id, [FromBody] CategoryDto updatedCategory)
         {
             if (updatedCategory == null)
                 return BadRequest(ModelState);
@@ -106,13 +109,10 @@ namespace Pirate_Movies.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var existingCategory = _categoryRepository.GetCategory(id);
-            if (existingCategory == null)
-                return NotFound();
 
-            existingCategory.Name = updatedCategory.Name;
+            var categoryMap = _mapper.Map<Category>(updatedCategory);
 
-            if (!_categoryRepository.UpdateCategory(existingCategory))
+            if (!_categoryRepository.UpdateCategory(categoryMap))
             {
                 ModelState.AddModelError("", "Something went wrong");
                 return StatusCode(500, ModelState);
