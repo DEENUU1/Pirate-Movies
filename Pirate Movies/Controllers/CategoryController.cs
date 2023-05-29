@@ -10,7 +10,7 @@ namespace Pirate_Movies.Controllers
     public class CategoryController : ControllerBase
     {
         private readonly ICategoryRepository _categoryRepository;
-        
+
         public CategoryController(ICategoryRepository categoryRepository)
         {
             _categoryRepository = categoryRepository;
@@ -22,7 +22,7 @@ namespace Pirate_Movies.Controllers
             var categories = _categoryRepository.GetCategories();
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState); 
+                return BadRequest(ModelState);
             }
             return Ok(categories);
         }
@@ -32,10 +32,10 @@ namespace Pirate_Movies.Controllers
         {
             if (!_categoryRepository.CategoryExists(id))
                 return NotFound();
-            
+
             var category = _categoryRepository.GetCategory(id);
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);  
+                return BadRequest(ModelState);
             return Ok(category);
         }
 
@@ -66,7 +66,7 @@ namespace Pirate_Movies.Controllers
                 return StatusCode(500, ModelState);
             }
 
-            return Ok("Successfully created"); 
+            return Ok("Successfully created");
 
         }
 
@@ -86,6 +86,36 @@ namespace Pirate_Movies.Controllers
             if (!_categoryRepository.DeleteCategory(categoryToDelete))
             {
                 ModelState.AddModelError("", "Something went wrong while deleting category");
+            }
+
+            return NoContent();
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult UpdateCategory(int id, [FromBody] Category updatedCategory)
+        {
+            if (updatedCategory == null)
+                return BadRequest(ModelState);
+
+            if (id != updatedCategory.Id)
+                return BadRequest(ModelState);
+
+            if (!_categoryRepository.CategoryExists(id))
+                return NotFound();
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var existingCategory = _categoryRepository.GetCategory(id);
+            if (existingCategory == null)
+                return NotFound();
+
+            existingCategory.Name = updatedCategory.Name;
+
+            if (!_categoryRepository.UpdateCategory(existingCategory))
+            {
+                ModelState.AddModelError("", "Something went wrong");
+                return StatusCode(500, ModelState);
             }
 
             return NoContent();
