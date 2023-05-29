@@ -1,6 +1,6 @@
 ﻿using Pirate_Movies.Models;
 
-namespace Pirate_Movies.Repository
+namespace Pirate_Movies.Interfaces
 {
     public interface ICountryRepository
     {
