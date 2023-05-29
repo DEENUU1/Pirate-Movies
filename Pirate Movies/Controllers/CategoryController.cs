@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Pirate_Movies.Interfaces;
 using Pirate_Movies.Models;
 
@@ -69,5 +70,25 @@ namespace Pirate_Movies.Controllers
 
         }
 
+        [HttpDelete("{id}")]
+        public IActionResult DeleteCategory(int id)
+        {
+            if (!_categoryRepository.CategoryExists(id))
+            {
+                return NotFound();
+            }
+
+            var categoryToDelete = _categoryRepository.GetCategory(id);
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!_categoryRepository.DeleteCategory(categoryToDelete))
+            {
+                ModelState.AddModelError("", "Something went wrong while deleting category");
+            }
+
+            return NoContent();
+        }
     }
 }
