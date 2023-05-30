@@ -6,7 +6,7 @@ namespace Pirate_Movies.Repository
 {
     public class CategoryRepository : ICategoryRepository
     {
-        private DataContext _context;
+        private readonly DataContext _context;
 
         public CategoryRepository(DataContext context)
         {

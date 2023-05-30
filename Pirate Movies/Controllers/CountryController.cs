@@ -3,52 +3,54 @@ using Microsoft.AspNetCore.Mvc;
 using Pirate_Movies.Dto;
 using Pirate_Movies.Interfaces;
 using Pirate_Movies.Models;
+using Pirate_Movies.Repository;
 
 namespace Pirate_Movies.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CategoryController : ControllerBase
+    public class CountryController : ControllerBase
     {
-        private readonly ICategoryRepository _categoryRepository;
+        private readonly ICountryRepository _countryRepository;
         private readonly IMapper _mapper;
-        public CategoryController(ICategoryRepository categoryRepository, IMapper mapper)
+
+        public CountryController(ICountryRepository countryRepository, IMapper mapper)
         {
-            _categoryRepository = categoryRepository;
+            _countryRepository = countryRepository;
             _mapper = mapper;
         }
 
         [HttpGet]
-        public IActionResult GetCategories()
+        public IActionResult GetCountries()
         {
-            var categories = _categoryRepository.GetCategories();
+            var country = _countryRepository.GetCountries();    
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            return Ok(categories);
+            return Ok(country); 
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetCategory(int id)
+        public IActionResult GetCountry(int id)
         {
-            if (!_categoryRepository.CategoryExists(id))
+            if (!_countryRepository.CountryExists(id))
                 return NotFound();
 
-            var category = _categoryRepository.GetCategory(id);
+            var category = _countryRepository.GetCountry(id);
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             return Ok(category);
         }
 
         [HttpPost]
-        public IActionResult CreateCategory([FromBody] CategoryDto categoryCreate)
+        public IActionResult CreateCountry([FromBody] CountryDto countryCreate)
         {
-            if (categoryCreate == null)
+            if (countryCreate == null)
                 return BadRequest(ModelState);
 
-            var category = _categoryRepository.GetCategories()
-                .Where(c => c.Name.Trim().ToUpper() == categoryCreate.Name.TrimEnd().ToUpper())
+            var category = _countryRepository.GetCountries()
+                .Where(c => c.Name.Trim().ToUpper() == countryCreate.Name.TrimEnd().ToUpper())
                 .FirstOrDefault();
 
             if (category != null)
@@ -60,9 +62,9 @@ namespace Pirate_Movies.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var categoryMap = _mapper.Map<Category>(categoryCreate);
+            var countryMap = _mapper.Map<Country>(countryCreate);
 
-            if (!_categoryRepository.CreateCategory(categoryMap))
+            if (!_countryRepository.CreateCountry(countryMap))
             {
                 ModelState.AddModelError("", "Something went wrong while saving");
                 return StatusCode(500, ModelState);
@@ -73,19 +75,19 @@ namespace Pirate_Movies.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteCategory(int id)
+        public IActionResult DeleteCountry(int id)
         {
-            if (!_categoryRepository.CategoryExists(id))
+            if (!_countryRepository.CountryExists(id))
             {
                 return NotFound();
             }
 
-            var categoryToDelete = _categoryRepository.GetCategory(id);
+            var countryToDelete = _countryRepository.GetCountry(id);
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (!_categoryRepository.DeleteCategory(categoryToDelete))
+            if (!_countryRepository.DeleteCountry(countryToDelete))
             {
                 ModelState.AddModelError("", "Something went wrong while deleting category");
             }
@@ -94,24 +96,24 @@ namespace Pirate_Movies.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateCategory(int id, [FromBody] CategoryDto updatedCategory)
+        public IActionResult UpdateCountry(int id, [FromBody] CountryDto updateCountry)
         {
-            if (updatedCategory == null)
+            if (updateCountry == null)
                 return BadRequest(ModelState);
 
-            if (id != updatedCategory.Id)
+            if (id != updateCountry.Id)
                 return BadRequest(ModelState);
 
-            if (!_categoryRepository.CategoryExists(id))
+            if (!_countryRepository.CountryExists(id))
                 return NotFound();
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
 
-            var categoryMap = _mapper.Map<Category>(updatedCategory);
+            var countryMap = _mapper.Map<Country>(updateCountry);
 
-            if (!_categoryRepository.UpdateCategory(categoryMap))
+            if (!_countryRepository.UpdateCountry(countryMap))
             {
                 ModelState.AddModelError("", "Something went wrong");
                 return StatusCode(500, ModelState);

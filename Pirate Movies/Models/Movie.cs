@@ -11,6 +11,7 @@
         public Country Country { get; set; }
         public int CountryId { get; set; }
         public ICollection<Link> Links { get; set; }
+        public ICollection<MovieActor> MovieActors { get; set; }
 
     }
 }
