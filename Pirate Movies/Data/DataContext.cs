@@ -13,10 +13,10 @@ namespace Pirate_Movies.Data
 
         public DbSet<Category> Categories { get; set; }
         public DbSet<Movie> Movies { get; set; }
-        public DbSet<Episode> Episodes { get; set;}
         public DbSet<Link> Links { get; set; }  
-        public DbSet<Show> Shows { get; set; }
         public DbSet<Country> Countries { get; set; }
+        public DbSet<Actor> Actors { get; set; }
+        public DbSet<MovieActor> MovieActors { get; set; }   
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Category One to Many 
@@ -25,37 +25,34 @@ namespace Pirate_Movies.Data
                 .WithMany(c => c.Movies) 
                 .HasForeignKey(m => m.CategoryId);
 
-            modelBuilder.Entity<Show>()
-                .HasOne(s => s.Category)
-                .WithMany(c => c.Shows)
-                .HasForeignKey(s => s.CategoryId);
             // Country One to Many
             modelBuilder.Entity<Movie>()
                 .HasOne(m => m.Country)
                 .WithMany(c => c.Movies)
                 .HasForeignKey(m => m.CountryId);
 
-            modelBuilder.Entity<Show>()
-                .HasOne(s => s.Country)
-                .WithMany(c => c.Shows)
-                .HasForeignKey(s => s.CountryId);
-            // Show One to Many
-            modelBuilder.Entity<Episode>()
-                .HasOne(e => e.Show)
-                .WithMany(s => s.Episodes)
-                .HasForeignKey(e => e.ShowId);
             // Links One to Many 
-            modelBuilder.Entity<Episode>()
-                .HasMany(e => e.Links)
-                .WithOne(l => l.Episode)
-                .HasForeignKey(l => l.EpisodeId)
-                .IsRequired(false);
 
             modelBuilder.Entity<Movie>()
                 .HasMany(m => m.Links)
                 .WithOne(l => l.Movie)
                 .HasForeignKey(l => l.MovieId)
-                .IsRequired(false);
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Actors Many to Many
+            modelBuilder.Entity<MovieActor>()
+                .HasKey(ma => new {ma.ActorId, ma.MovieId});
+
+            modelBuilder.Entity<MovieActor>()
+                .HasOne<Actor>(sc => sc.Actor)
+                .WithMany(s => s.MovieActors)
+                .HasForeignKey(sc => sc.ActorId);
+
+            modelBuilder.Entity<MovieActor>()
+                .HasOne<Movie>(sc => sc.Movie)
+                .WithMany(s => s.MovieActors)
+                .HasForeignKey(sc => sc.MovieId);
 
             base.OnModelCreating(modelBuilder);
         }
