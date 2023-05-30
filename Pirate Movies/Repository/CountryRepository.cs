@@ -40,6 +40,11 @@ namespace Pirate_Movies.Repository
             return _context.Countries.Where(c => c.Id == id).FirstOrDefault();
         }
 
+        public ICollection<Movie> GetMoviesByCountry(int id)
+        {
+            return _context.Countries.Where(c => c.Id == id).SelectMany(c => c.Movies).ToList();
+        }
+
         public bool Save()
         {
             var saved = _context.SaveChanges();

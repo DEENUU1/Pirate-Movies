@@ -43,6 +43,18 @@ namespace Pirate_Movies.Controllers
             return Ok(category);
         }
 
+        [HttpGet("movie/{id}")]
+        public IActionResult GetMovieByCountry(int id)
+        {
+            if (!_countryRepository.CountryExists(id))
+                return NotFound();
+
+            var movies = _countryRepository.GetMoviesByCountry(id);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            return Ok(movies);
+        }
+
         [HttpPost]
         public IActionResult CreateCountry([FromBody] CountryDto countryCreate)
         {
