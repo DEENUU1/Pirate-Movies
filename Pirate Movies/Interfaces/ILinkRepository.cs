@@ -7,8 +7,7 @@ namespace Pirate_Movies.Interfaces
         ICollection<Link> GetLinks();
         Link GetLink(int id);
         ICollection<Link> GetLinksByMovieId(int movieId);
-        ICollection<Link> GetLinksByEpisodeId(int episodeId);
-        bool LinkExist(Link link); 
+        bool LinkExist(int id); 
         bool CreateLink(Link link);
         bool UpdateLink(Link link);
         bool DeleteLink(Link link);
