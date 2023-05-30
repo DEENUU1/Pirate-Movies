@@ -15,10 +15,21 @@ namespace Pirate_Movies
             using (var context = new DataContext(
                 serviceProvider.GetRequiredService<DbContextOptions<DataContext>>()))
             {
-                if (context.Categories.Any() || context.Countries.Any() || context.Shows.Any() || context.Movies.Any() || context.Episodes.Any() || context.Links.Any() )
+                if (context.Categories.Any() || context.Countries.Any() || context.Movies.Any() || context.Links.Any() || context.Actors.Any() || context.MovieActors.Any())
                 {
                     return;   // Already seeded
                 }
+
+
+
+                var actors = new List<Actor>
+                {
+                    new Actor { FullName = "Elizabeth Olsen" },
+                    new Actor { FullName = "Brat Pitt" },
+                    new Actor { FullName = "Tony Stark" }
+                };
+                context.Actors.AddRange(actors);
+                context.SaveChanges();
 
                 var categories = new List<Category>
                 {
@@ -60,57 +71,7 @@ namespace Pirate_Movies
                 context.Movies.AddRange(movies);
                 context.SaveChanges();
 
-                var shows = new List<Show>
-                {
-                    new Show
-                    {
-                        Title = "Show 1",
-                        Description = "Description for Show 1",
-                        DateRelease = DateTime.Now.AddDays(-10),
-                        CountryId = countries.Single(c => c.Name == "USA").Id,
-                        CategoryId = categories.Single(c => c.Name == "Drama").Id
-                    },
-                    new Show
-                    {
-                        Title = "Show 2",
-                        Description = "Description for Show 2",
-                        DateRelease = DateTime.Now.AddDays(-5),
-                        CountryId = countries.Single(c => c.Name == "UK").Id,
-                        CategoryId = categories.Single(c => c.Name == "Action").Id
-                    }
-                };
-                context.Shows.AddRange(shows);
-                context.SaveChanges();
-
-                var episodes = new List<Episode>
-                {
-                    new Episode
-                    {
-                        Number = 1,
-                        Title = "Episode 1",
-                        ShowId = shows.Single(s => s.Title == "Show 1").Id
-                    },
-                    new Episode
-                    {
-                        Number = 2,
-                        Title = "Episode 2",
-                        ShowId = shows.Single(s => s.Title == "Show 1").Id
-                    },
-                    new Episode
-                    {
-                        Number = 1,
-                        Title = "Episode 1",
-                        ShowId = shows.Single(s => s.Title == "Show 2").Id
-                    },
-                    new Episode
-                    {
-                        Number = 2,
-                        Title = "Episode 2",
-                        ShowId = shows.Single(s => s.Title == "Show 2").Id
-                    }
-                };
-                context.Episodes.AddRange(episodes);
-                context.SaveChanges();
+                
 
                 var links = new List<Link>
                 {
@@ -128,22 +89,23 @@ namespace Pirate_Movies
                         Quality = "SD",
                         MovieId = movies.Single(m => m.Title == "Movie 2").Id
                     },
-                    new Link
-                    {
-                        ServiceName = "Service 1",
-                        Url = "http://example.com/link3",
-                        Quality = "HD",
-                        EpisodeId = episodes.Single(e => e.Title == "Episode 1" && e.ShowId == shows.Single(s => s.Title == "Show 1").Id).Id
-                    },
-                    new Link
-                    {
-                        ServiceName = "Service 2",
-                        Url = "http://example.com/link4",
-                        Quality = "SD",
-                        EpisodeId = episodes.Single(e => e.Title == "Episode 2" && e.ShowId == shows.Single(s => s.Title == "Show 1").Id).Id
-                    }
                 };
                 context.Links.AddRange(links);
+                context.SaveChanges();
+
+                // Movie Actors
+                var movieActors = new List<MovieActor>
+                {
+                    new MovieActor { ActorId = 1, MovieId = 1 },
+                    new MovieActor { ActorId = 2, MovieId = 1 },
+                    new MovieActor { ActorId = 3, MovieId = 1 },
+                    new MovieActor { ActorId = 1, MovieId = 2 },
+                    new MovieActor { ActorId = 2, MovieId = 2 },
+                    new MovieActor { ActorId = 1, MovieId = 2 },
+                    new MovieActor { ActorId = 2, MovieId = 2 }
+            // Add more movie actors here if needed
+                };
+                context.MovieActors.AddRange(movieActors);
                 context.SaveChanges();
             }
         }
