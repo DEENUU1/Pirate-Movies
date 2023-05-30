@@ -41,6 +41,18 @@ namespace Pirate_Movies.Controllers
             return Ok(category);
         }
 
+        [HttpGet("movie/{id}")]
+        public IActionResult GetMovieByCategory(int id)
+        {
+            if (!_categoryRepository.CategoryExists(id))
+                return NotFound();
+
+            var movies = _categoryRepository.GetMoviesByCategory(id);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            return Ok(movies);
+        }
+
         [HttpPost]
         public IActionResult CreateCategory([FromBody] CategoryDto categoryCreate)
         {

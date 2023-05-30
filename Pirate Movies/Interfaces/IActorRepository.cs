@@ -6,6 +6,7 @@ namespace Pirate_Movies.Interfaces
     {
         ICollection<Actor> GetActors();
         Actor GetActor(int id);
+        ICollection<Movie> GetActorMovies(int id);
         bool ActorExists(int id);
         bool CreateActor(Actor actor);
         bool UpdateActor(Actor actor);

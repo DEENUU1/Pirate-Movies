@@ -1,4 +1,5 @@
-﻿using Pirate_Movies.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using Pirate_Movies.Data;
 using Pirate_Movies.Interfaces;
 using Pirate_Movies.Models;
 
@@ -38,6 +39,11 @@ namespace Pirate_Movies.Repository
         public Category GetCategory(int id)
         {
             return _context.Categories.Where(c => c.Id == id).FirstOrDefault();
+        }
+
+        public ICollection<Movie> GetMoviesByCategory(int id)
+        {
+            return _context.Categories.Where(c => c.Id == id).SelectMany(c => c.Movies).ToList();
         }
 
         public bool Save()

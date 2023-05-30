@@ -6,9 +6,8 @@ namespace Pirate_Movies.Interfaces
     {
         ICollection<Movie> GetMovies();
         Movie GetMovie(int id);
-        ICollection<Movie> GetMovieByCategory(int categoryId);
-        ICollection<Movie> GetMovieByCountry(int countryId);
-        ICollection<Link> GetMovieLinks(int movieId);
+        ICollection<Link> GetMovieLinks(int id);
+        ICollection<Actor> GetMovieActors(int id);
         bool MovieExists(int id);
         bool CreateMovie(Movie movie);
         bool UpdateMovie(Movie movie);
