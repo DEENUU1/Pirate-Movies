@@ -12,6 +12,8 @@ namespace Pirate_Movies.Helper
             CreateMap<CategoryDto, Category>();
             CreateMap<Country, CountryDto>();
             CreateMap<CountryDto, Country>();
+            CreateMap<ActorDto, Actor>();
+            CreateMap<ActorDto, ActorDto>();
         }
 
     }
