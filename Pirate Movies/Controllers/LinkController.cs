@@ -45,17 +45,6 @@ namespace Pirate_Movies.Controllers
             return Ok(link);
         }
 
-        [HttpGet("movie/{movieId}")]
-        public IActionResult GetLinkByMovie(int movieId)
-        {
-            var links = _linkRepository.GetLinksByMovieId(movieId);
-            if (links == null || links.Count == 0)
-            {
-                return NotFound();
-            }
-            return Ok(links);   
-        }
-
         [HttpPost]
         public IActionResult CreateLink([FromBody] LinkDto linkCreate)
         {

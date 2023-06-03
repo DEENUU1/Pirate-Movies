@@ -34,11 +34,6 @@ namespace Pirate_Movies.Repository
             return _context.Links.ToList();
         }
 
-        public ICollection<Link> GetLinksByMovieId(int movieId)
-        {
-            return _context.Links.Where(m => m.MovieId == movieId).ToList();
-        }
-
         public bool LinkExist(int Id)
         {
             return _context.Links.Any(c  => c.Id == Id);
