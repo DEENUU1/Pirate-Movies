@@ -119,19 +119,6 @@ namespace Pirate_Movies.Controllers
 
             return NoContent();
         }
-
-        //[HttpGet("{id}/movies")]
-        //public IActionResult GetActorMovies(int id)
-        //{
-            //if (!_actorRepository.ActorExists(id))
-              //  return NotFound();
-
-            //var actorMovie = _actorRepository.GetActorMovies(id);
-            //if (actorMovie == null)
-                //return NotFound();
-
-            //return Ok(actorMovie);
-        //}
     
     }
 }

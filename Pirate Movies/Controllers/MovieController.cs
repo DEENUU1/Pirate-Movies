@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Pirate_Movies.Data;
 using Pirate_Movies.Dto;
 using Pirate_Movies.Interfaces;
 using Pirate_Movies.Models;
@@ -13,10 +15,12 @@ namespace Pirate_Movies.Controllers
     {
         private readonly IMovieRepository _movieRepository;
         private readonly IMapper _mapper;
+
         public MovieController(IMovieRepository movieRepository, IMapper mapper)
         {
             _movieRepository = movieRepository;
             _mapper = mapper;
+
         }
 
         [HttpGet]
@@ -147,6 +151,8 @@ namespace Pirate_Movies.Controllers
 
             return Ok(movieLinks);
         }
+
+
 
     }
 }
