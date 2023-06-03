@@ -1,4 +1,5 @@
-﻿using Pirate_Movies.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using Pirate_Movies.Data;
 using Pirate_Movies.Interfaces;
 using Pirate_Movies.Models;
 
@@ -33,10 +34,10 @@ namespace Pirate_Movies.Repository
             return _context.Actors.Where(a => a.Id == id).FirstOrDefault();
         }
 
-        public ICollection<MovieActor> GetActorMovies(int id)
-        {
-            return _context.MovieActors.Where(ma => ma.ActorId == id).ToList();
-        }
+        //public ICollection<MovieActor> GetActorMovies(int id)
+        //{
+          //  return _context.MovieActors.Where(ma => ma.ActorId == id).ToList();
+        //}
 
         public ICollection<Actor> GetActors()
         {
