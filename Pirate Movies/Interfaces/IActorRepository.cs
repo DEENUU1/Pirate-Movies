@@ -13,5 +13,7 @@ namespace Pirate_Movies.Interfaces
         bool DeleteActor(Actor actor);
         bool Save();
         ICollection<MovieDto> GetMoviesByActorId(int actorId);
+        bool AddActorToMovie(int actorId, int movieId);
+        bool RemoveActorFromMovie(int actorId, int movieId);
     }
 }
