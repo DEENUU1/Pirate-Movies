@@ -93,6 +93,20 @@ namespace Pirate_Movies.Controllers
             return NoContent();
         }
 
+        [HttpGet("{actorId}/movies")]
+        public IActionResult GetMoviesByActorId(int actorId)
+        {
+            if (!_actorRepository.ActorExists(actorId))
+                return NotFound();
+
+            var movies = _actorRepository.GetMoviesByActorId(actorId);
+
+            if (movies == null)
+                return NotFound();
+
+            return Ok(movies);
+        }
+
         [HttpPut("{id}")]
         public IActionResult UpdateActor(int id, [FromBody] ActorDto updatedActor)
         {

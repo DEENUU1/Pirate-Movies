@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Pirate_Movies;
 using Pirate_Movies.Data;
-using Pirate_Movies.Interfaces;
 using Pirate_Movies.Repository;
+using Pirate_Movies.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,7 +17,7 @@ builder.Services.AddScoped<ICountryRepository, CountryRepository>();
 builder.Services.AddScoped<ILinkRepository, LinkRepository>();
 builder.Services.AddScoped<IActorRepository, ActorRepository>();    
 builder.Services.AddScoped<IMovieRepository, MovieRepository>();
-
+builder.Services.AddScoped<MovieActorService>();
 builder.Services.AddDbContext<DataContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("Data"));
@@ -43,9 +43,5 @@ app.MapControllers();
 
 app.UseDeveloperExceptionPage();
 
-using (var scope = app.Services.CreateScope())
-{
-    Seed.Initialize(scope.ServiceProvider);
-}
 
 app.Run();

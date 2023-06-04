@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Pirate_Movies.Data;
+using Pirate_Movies.Dto;
 using Pirate_Movies.Interfaces;
 using Pirate_Movies.Models;
 
@@ -8,9 +10,11 @@ namespace Pirate_Movies.Repository
     public class ActorRepository : IActorRepository
     {
         private readonly DataContext _context;
-        public ActorRepository(DataContext context)
+        private readonly IMapper _mapper;
+        public ActorRepository(DataContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
         public bool ActorExists(int id)
         {
@@ -31,12 +35,30 @@ namespace Pirate_Movies.Repository
 
         public Actor GetActor(int id)
         {
-            return _context.Actors.Where(a => a.Id == id).FirstOrDefault();
+            return _context.Actors.FirstOrDefault(a => a.Id == id);
+
         }
 
-        public ICollection<Actor> GetActors()
+        public ICollection<ActorDto> GetActors()
         {
-            return _context.Actors.ToList();
+            var actors = _context.Actors.Include(a => a.MovieActors).ToList();
+            var actorDtos = _mapper.Map<ICollection<ActorDto>>(actors);
+            return actorDtos;
+        }
+
+        public ICollection<MovieDto> GetMoviesByActorId(int actorId)
+        {
+            var actor = _context.Actors
+                .Include(a => a.MovieActors)
+                .ThenInclude(ma => ma.Movie)
+                .FirstOrDefault(a => a.Id == actorId);
+
+            if (actor == null)
+                return null;
+
+            var movies = actor.MovieActors.Select(ma => ma.Movie).ToList();
+            var movieDtos = _mapper.Map<ICollection<MovieDto>>(movies);
+            return movieDtos;
         }
 
         public bool Save()
@@ -48,6 +70,29 @@ namespace Pirate_Movies.Repository
         public bool UpdateActor(Actor actor)
         {
             _context.Update(actor);
+            return Save();
+        }
+
+        public bool AddActorToMovie(int actorId, int movieId)
+        {
+            var movieActor = new MovieActor
+            {
+                MovieId = movieId,
+                ActorId = actorId
+            };
+
+            _context.MovieActors.Add(movieActor);
+            return Save();
+        }
+
+        public bool RemoveActorFromMovie(int actorId, int movieId)
+        {
+            var movieActor = _context.MovieActors.FirstOrDefault(ma => ma.ActorId == actorId && ma.MovieId == movieId);
+
+            if (movieActor != null)
+            {
+                _context.MovieActors.Remove(movieActor);
+            }
             return Save();
         }
     }

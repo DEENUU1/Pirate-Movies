@@ -14,5 +14,7 @@ namespace Pirate_Movies.Interfaces
         bool DeleteMovie(Movie movie);
         bool Save();
         bool AddMovieActor(MovieActor movieActor);
+        bool AddMovieToActor(int movieId, int actorId);
+        bool RemoveMovieFromActor(int movieId, int actorId);
     }
 }

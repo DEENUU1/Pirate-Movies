@@ -1,8 +1,5 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
-using Pirate_Movies.Dto;
+﻿using Microsoft.AspNetCore.Mvc;
 using Pirate_Movies.Interfaces;
-using Pirate_Movies.Models;
 using Pirate_Movies.Repository;
 
 namespace Pirate_Movies.Controllers
@@ -11,41 +8,19 @@ namespace Pirate_Movies.Controllers
     [ApiController]
     public class MovieActorController : ControllerBase
     {
-        private readonly IMovieRepository _movieRepository;
-        private readonly IActorRepository _actorRepository;
-        public MovieActorController(IMovieRepository movieRepository, IActorRepository actorRepository)
+        private readonly MovieActorService _movieActorService;
+
+        public MovieActorController(MovieActorService movieActorService)
         {
-            _movieRepository = movieRepository;
-            _actorRepository = actorRepository;
+            _movieActorService = movieActorService;
         }
 
-        [HttpPost("{movieId}/actors/{actorId}")]
-        public IActionResult AddActorToMovie(int movieId, int actorId)
+        [HttpPost]
+        public IActionResult AssignActorToMovie(int actorId, int movieId)
         {
-            if (!_movieRepository.MovieExists(movieId))
-                return NotFound("Movie not found");
-
-            var movie = _movieRepository.GetMovie(movieId);
-
-            if (!_actorRepository.ActorExists(actorId))
-                return NotFound("Actor not found");
-
-            var actor = _actorRepository.GetActor(actorId);
-
-            var movieActor = new MovieActor
-            {
-                MovieId = movieId,
-                ActorId = actorId,
-                Movie = movie,
-                Actor = actor
-            };
-
-            if (!_movieRepository.AddMovieActor(movieActor))
-            {
-                return StatusCode(500, "Something went wrong while adding actor to the movie");
-            }
-
-            return Ok("Actor added to the movie successfully");
+            _movieActorService.AssignActorToMovie(actorId, movieId);
+            return Ok();
         }
+
     }
 }
