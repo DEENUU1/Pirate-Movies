@@ -60,5 +60,41 @@ namespace Pirate_Movies.Repository
             _context.Update(movie);
             return Save();
         }
+
+        public bool AddMovieActor(MovieActor movieActor)
+        {
+            var existingMovieActor = _context.MovieActors.FirstOrDefault(ma => ma.ActorId == movieActor.ActorId && ma.MovieId == movieActor.MovieId);
+
+            if (existingMovieActor != null)
+            {
+                return true;
+            }
+
+            _context.MovieActors.Add(movieActor);
+            return Save();
+        }
+
+        public bool AddMovieToActor(int movieId, int actorId)
+        {
+            var movieActor = new MovieActor
+            {
+                MovieId = movieId,
+                ActorId = actorId
+            };
+
+            _context.MovieActors.Add(movieActor);
+            return Save();
+        }
+
+        public bool RemoveMovieFromActor(int movieId, int actorId)
+        {
+            var movieActor = _context.MovieActors.FirstOrDefault(ma => ma.MovieId == movieId && ma.ActorId == actorId);
+
+            if (movieActor != null)
+            {
+                _context.MovieActors.Remove(movieActor);
+            }
+            return Save();
+        }
     }
 }

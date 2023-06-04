@@ -93,6 +93,20 @@ namespace Pirate_Movies.Controllers
             return NoContent();
         }
 
+        [HttpGet("{actorId}/movies")]
+        public IActionResult GetMoviesByActorId(int actorId)
+        {
+            if (!_actorRepository.ActorExists(actorId))
+                return NotFound();
+
+            var movies = _actorRepository.GetMoviesByActorId(actorId);
+
+            if (movies == null)
+                return NotFound();
+
+            return Ok(movies);
+        }
+
         [HttpPut("{id}")]
         public IActionResult UpdateActor(int id, [FromBody] ActorDto updatedActor)
         {
@@ -119,19 +133,6 @@ namespace Pirate_Movies.Controllers
 
             return NoContent();
         }
-
-        //[HttpGet("{id}/movies")]
-        //public IActionResult GetActorMovies(int id)
-        //{
-            //if (!_actorRepository.ActorExists(id))
-              //  return NotFound();
-
-            //var actorMovie = _actorRepository.GetActorMovies(id);
-            //if (actorMovie == null)
-                //return NotFound();
-
-            //return Ok(actorMovie);
-        //}
     
     }
 }

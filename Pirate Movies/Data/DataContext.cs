@@ -16,7 +16,7 @@ namespace Pirate_Movies.Data
         public DbSet<Link> Links { get; set; }  
         public DbSet<Country> Countries { get; set; }
         public DbSet<Actor> Actors { get; set; }
-        public DbSet<MovieActor> MovieActors { get; set; }   
+        public DbSet<MovieActor> MovieActors { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Category One to Many 
@@ -42,17 +42,17 @@ namespace Pirate_Movies.Data
 
             // Actors Many to Many
             modelBuilder.Entity<MovieActor>()
-                .HasKey(ma => new {ma.ActorId, ma.MovieId});
+            .HasKey(ma => new { ma.MovieId, ma.ActorId });
 
             modelBuilder.Entity<MovieActor>()
-                .HasOne<Actor>(sc => sc.Actor)
-                .WithMany(s => s.MovieActors)
-                .HasForeignKey(sc => sc.ActorId);
+                .HasOne(ma => ma.Movie)
+                .WithMany(m => m.MovieActors)
+                .HasForeignKey(ma => ma.MovieId);
 
             modelBuilder.Entity<MovieActor>()
-                .HasOne<Movie>(sc => sc.Movie)
-                .WithMany(s => s.MovieActors)
-                .HasForeignKey(sc => sc.MovieId);
+                .HasOne(ma => ma.Actor)
+                .WithMany(a => a.MovieActors)
+                .HasForeignKey(ma => ma.ActorId);
 
             base.OnModelCreating(modelBuilder);
         }
